@@ -1,0 +1,6 @@
+{
+  "name": "Kestrel Control",
+  "description": "Multi-protocol VLESS/XHTTP/TCP/WS proxy relay, outbound scanner, node federation, Telegram bot, and Mini App management platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
