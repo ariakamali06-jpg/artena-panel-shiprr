@@ -18453,7 +18453,7 @@ var require_finalhandler = __commonJS({
     module2.exports = finalhandler;
     function finalhandler(req, res, options) {
       var opts = options || {};
-      var env = opts.env || process.env.NODE_ENV || "development";
+      var env = opts.env || "production";
       var onerror = opts.onerror;
       return function(err) {
         var headers;
@@ -21652,7 +21652,7 @@ var require_application = __commonJS({
       this.defaultConfiguration();
     };
     app.defaultConfiguration = function defaultConfiguration() {
-      var env = process.env.NODE_ENV || "development";
+      var env = "production";
       this.enable("x-powered-by");
       this.set("etag", "weak");
       this.set("env", env);
@@ -37517,7 +37517,7 @@ function createApiRouter() {
 
 // server.ts
 var PORT = Number(process.env.PORT || 3e3);
-var IS_PROD = process.env.NODE_ENV === "production";
+var IS_PROD = true;
 async function bootstrap() {
   logStartupConfigSummary(stateStore.state.settings);
   const app = (0, import_express3.default)();
@@ -37529,7 +37529,12 @@ async function bootstrap() {
   app.use(createApiRouter());
   const distDir = import_node_path5.default.resolve(process.cwd(), "dist");
   if (!IS_PROD) {
-    const { createServer: createViteServer } = await import("vite");
+    let createViteServer;
+    try {
+      ({ createServer: createViteServer } = await import("vite"));
+    } catch {
+      throw new Error("vite not installed - dev mode requires npm install (see package.source.json)");
+    }
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa"

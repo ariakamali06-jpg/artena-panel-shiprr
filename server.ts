@@ -30,7 +30,12 @@ async function bootstrap(): Promise<void> {
   // Frontend delivery: Vite dev middleware in development, built static bundle in production
   const distDir = path.resolve(process.cwd(), 'dist');
   if (!IS_PROD) {
-    const { createServer: createViteServer } = await import('vite');
+    let createViteServer: any;
+    try {
+      ({ createServer: createViteServer } = await import('vite'));
+    } catch {
+      throw new Error('vite not installed - dev mode requires npm install (see package.source.json)');
+    }
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
